@@ -7,14 +7,20 @@ from urllib.parse import unquote
 from home.models import Post, Place
 
 # Create your views here.
-def create_post(request):
+def create_post(request, place_id):
     form = PostForm()
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user
-            post.save()
+            #post = form.save(commit=False) 
+            post = Post.objects.create(
+                user = request.user,
+                content = request.POST.get("content"),
+                title = request.POST.get("title"),
+                place = Place.objects.get(pk=place_id)
+            )
+            #post.user = request.user
+            #post.save()
             return redirect('home')
         else:
             form = PostForm()
@@ -26,19 +32,6 @@ def feed(request):
     place = get_object_or_404(Place, id=place_id)
     
     posts = Post.objects.filter(place=place)
-    #posts = Post.objects.all()
-    #post_titles = [post.title for post in posts]
+    
     
     return render(request, 'social_app/feed.html', {'place': place, 'posts': posts})
-
-    #return render(request, 'social_app/feed.html', {'titles': json.dumps(titles)})
-    
-    
-
-    '''
-    if request.method == 'POST':
-        content = request.POST.get('content')
-        post = Post.objects.create(place=place, content=content)
-        
-    return render(request, 'social_app/feed_page.html', {'place': place, 'posts': posts})
-    '''

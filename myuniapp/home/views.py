@@ -6,7 +6,7 @@ from .forms import *
 from .models import Place
 from django.contrib.auth.decorators import login_required
 
-@login_required(login_url='/login/')
+#@login_required(login_url='/login/')
 def home(request):
     places = Place.objects.all()
     places_data = [

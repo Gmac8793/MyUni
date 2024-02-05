@@ -161,7 +161,7 @@ a:hover {
     }
 }
 #map {
-  height: 400px; 
+  height: 700px; 
   width: 100%;   
 }
 
@@ -173,11 +173,14 @@ a:hover {
     <ul class="menu">
       <li class="logo"><a href="#">MyUni</a></li>
       <li class="item"><a href="#">Home</a></li>
-      <li class="item"><a href="{% url 'create_post' %}">Post</a></li>
       <li class="item"><a href="{% url 'add_new_place' %}">Add Landmark</a></li>
-      <li class="item button"><a href="{% url 'login_user' %}">Login</a></li>
+      {% if user.is_authenticated %}
+      <li class="item">{{ user.username }}</li>
       <li class="item button"><a href="{% url 'logout_user' %}">Logout</a></li>
+      {% else %}
+      <li class="item button"><a href="{% url 'login_user' %}">Login</a></li>
       <li class="item button secondary"><a href="{% url 'signup' %}">Sign Up</a></li>
+      {% endif %}
       <li class="toggle"><span class="bars"></span></li>
     </ul>
   </nav>
