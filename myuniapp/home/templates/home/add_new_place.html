@@ -1,0 +1,9 @@
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add New Place</button>
+  </form>
+
+{% endblock %}

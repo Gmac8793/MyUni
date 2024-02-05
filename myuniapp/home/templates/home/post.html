@@ -1,0 +1,7 @@
+<h1>Want to share anything?</h1>
+<br>
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Post</button>
+</form>
