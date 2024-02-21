@@ -1,0 +1,8 @@
+<h1>Want to share anything?</h1>
+<br>
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit"><a href="{% url 'feed' "></a>Post</button>
+</form>

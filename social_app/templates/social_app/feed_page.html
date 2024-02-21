@@ -1,0 +1,15 @@
+<h1>Feed for {{ place.name }}</h1>
+
+{% for post in posts %}
+    <div>
+        <p>Title: {{ post.title }}</p>
+        <p>Content: {{ post.content }}</p>
+        <!-- Display other post details as needed -->
+    </div>
+{% endfor %}
+
+<form method="post" action="">
+    {% csrf_token %}
+    <textarea name="content" placeholder="Write your post"></textarea>
+    <button type="submit">Post</button>
+</form>

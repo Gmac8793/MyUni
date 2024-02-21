@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Uni</title>
+<link rel="stylesheet" href="{% static 'css/base_style.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+
+<body>
+  <nav>
+    <ul class="menu">
+      <li class="logo"><a href="#">MyUni</a></li>
+      <li class="item"><a href="#">Home</a></li>
+      {% if user.is_authenticated %}
+      <li class="item">{{ user.username }}</li>
+      <li class="item button"><a href="{% url 'logout_user' %}">Logout</a></li>
+      {% else %}
+      <li class="item button"><a href="{% url 'login_user' %}">Login</a></li>
+      <li class="item button secondary"><a href="{% url 'signup' %}">Sign Up</a></li>
+      {% endif %}
+      <li class="toggle"><span class="bars"></span></li>
+    </ul>
+  </nav>
+
+  {% block content %}
+
+  {% endblock %}
+
+
+
+<!--script file-->
+<script>
+  $(function() {
+    $(".toggle").on("click", function() {
+      if($(".item").hasClass("active")){
+        $(".item").removeClass("active");
+      }
+      else{
+        $(".item").addClass("active");
+      }
+    })
+  }); 
+
+var map = L.map('map');
+map.setView([15.117569258172438, 104.90279805091271], 13);
+
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribute: '© OpenStreetMap'
+}).addTo(map);
+
+navigator.geolocation.watchPosition(success, error);
+
+let marker, zoomed;
+
+function success(pos) {
+
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
+    if (marker) {
+        map.removeLayer(marker);
+    }
+
+    marker = L.marker([lat, lng]).addTo(map);
+    
+}
+
+function error(err) {
+
+    if (err.code === 1) {
+        alert("Please allow geolocation access");
+    } else {
+        alert("Cannot get current location");
+    }
+}
+
+var places = {{ places_data|safe }};
+
+var customIcon = L.icon({
+  iconUrl: '{% static "images/marker6.png" %}',
+  iconSize: [20, 20],
+  iconAnchor: [19, 20],
+  popupAnchor: [0, -20]
+});
+
+map.on('contextmenu', function(e) {
+  var latlng = e.latlng;
+  var lat = latlng.lat;
+  var lng = latlng.lng;
+
+  var popupContent = "Latitude: " + lat + "<br>Longitude: " + lng;
+
+  L.popup()
+      .setLatLng(latlng)
+      .setContent(popupContent + '<br><button><a href="{% url "add_new_place" %}">Add This Place</a></button>')
+      .openOn(map);
+});
+
+places.forEach(place => {
+  L.marker(place.location, { icon: customIcon })
+    .addTo(map)
+      .bindPopup(place.name + '<br><button><a href="{% url "feed" %}?id=' + place.id + '" class="post-feed-link">เยี่ยมชม</a></button>');
+      
+});
+
+
+
+</script>
+
+</body>
+</html>
+
+

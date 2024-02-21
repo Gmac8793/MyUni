@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">-->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Feed Page</title>
+    <style>
+       body {
+        background-color: #ffedd5;
+        color: #8F6C59;
+       }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="flex flex-col md:flex-row h-screen">
+    <!-- Sidebar -->
+    <div class="bg-orange-600 text-white w-64 flex-shrink-0">
+      <!-- Sidebar content -->
+      <div class="p-4">
+        <div class="logo text-xl font-bold"><a href="{% url 'home' %}">MyUni</a></div>
+        
+        <!-- Navigation links -->
+        <ul class="mt-4">
+          <li>
+            <a href="#" class="block py-2 px-4 text-sm">Profile</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 px-4 text-sm">Feed</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 px-4 text-sm">Notification</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 px-4 text-sm">Follower</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 px-4 text-sm">Event</a>
+          </li>
+          <li>
+            <a href="{% url 'create_post' place_id=place.id %}" class="block py-2 px-4 text-sm">Post</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <!-- Main content area -->
+    <div class="flex-1">
+      <!-- Your main content here -->
+      <div class="p-4">
+
+        <header>        
+          <div class="p-8 text-center ">
+              <h1 class="text-3xl">{{ place.name }}</h1>
+          </div>
+        </header>
+      
+        <main>
+            <div class="text-center">
+                <div class="pt-6 container mx-auto">
+                    <div class="rows">
+                        
+                        {% if posts %}
+                            <div class="py-8 bg-orange-600 text-white">
+                                <ul>
+                                    {% for post in posts %}
+                                        <li class="border border-white bg-orange-600 mb-4 p-4 rounded"><a href="{% url 'post_content' post_id=post.id  %}">{{ post.title }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div><br>
+                        {% else %}
+                            <p>ยังไม่มีโพสที่นี่</p>
+                        {% endif %}
+                
+                        <!--
+                          <div grid-rows-2>
+                            <button type="submit" class="p-4 bg-orange-600 text-white"><a href="{% url 'home' %}">Back</a></button>
+                            <button type="submit" class="p-4 bg-orange-600 text-white"><a href="{% url 'create_post' place_id=place.id %}">Post</a></button>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>
