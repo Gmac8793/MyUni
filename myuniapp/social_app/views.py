@@ -10,17 +10,15 @@ from home.models import Post, Place
 def create_post(request, place_id):
     form = PostForm()
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            #post = form.save(commit=False) 
             post = Post.objects.create(
                 user = request.user,
                 content = request.POST.get("content"),
                 title = request.POST.get("title"),
                 place = Place.objects.get(pk=place_id)
             )
-            #post.user = request.user
-            #post.save()
+            
             return redirect('home')
         else:
             form = PostForm()
@@ -35,3 +33,9 @@ def feed(request):
     
     
     return render(request, 'social_app/feed.html', {'place': place, 'posts': posts})
+
+
+def post_content(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    return render(request, 'social_app/post_content.html', {'post': post})
+    

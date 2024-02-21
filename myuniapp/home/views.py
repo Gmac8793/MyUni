@@ -1,9 +1,12 @@
+import auth_token
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User, auth
+from django.contrib import messages
 from django.contrib import messages
 import json
 from .forms import *
-from .models import Place
+from .models import Place, Profile
 from django.contrib.auth.decorators import login_required
 
 #@login_required(login_url='/login/')
@@ -48,24 +51,36 @@ def logout_user(request):
     return redirect('home')
 
 
-def signup_user(request):
+def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            #form.save()
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             #Authenticate
             user = authenticate(username=username, password=password)
             login(request, user)
+            #create profile
+            Profile.objects.create(user=user, id_user=user.id)
             messages.success(request, "ลงทะเบียนสำเร็จ")
             return redirect('home')
     else:
         form = SignUpForm()          
-        #return render(request, 'home/register.html', {'form':form})
     
     return render(request, 'home/signup.html', {'form':form})
-
+    
+#@login_required(login_url='/login/')
+def profile_settings(request):
+    if request.method == 'POST':
+        form = ProfileSettingsForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_settings')
+    else:
+        form = ProfileSettingsForm(instance=request.user.profile)
+    return render(request, 'home/profile_settings.html', {'form': form})
 
 def add_new_place(request):
     if request.method == 'POST':

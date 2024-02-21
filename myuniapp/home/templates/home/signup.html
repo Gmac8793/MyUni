@@ -1,108 +1,51 @@
+{% extends 'home/base.html' %}
 {% block content %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <title>Register</title>
-
-    <style>
-        #map { height: 500px; }
-        #mySidebar {
-          background-color: #C4C7B2;
-        }
-        .w3{
-          background-color: #DADDC8;
-          height: 100vh;
-        }
-        .w3-button {
-          color: white; /* Text color */
-        }
-    </style>
-</head>
-
-<body>
-<!--Side Bar-->
-<div class="w3-sidebar w3-bar-block w3-border-right" style="display: none;" id="mySidebar">
-    <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
-    <a href="#" class="w3-bar-item w3-button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>       
-      Home
-    </a>
-    <a href="#" class="w3-bar-item w3-button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Profile
-    </a>
-    <a href="#" class="w3-bar-item w3-button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rss"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
-      Feed
-    </a>
-    <a href="#" class="w3-bar-item w3-button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check-2"><path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m16 20 2 2 4-4"/></svg>
-      Event
-    </a>
-  </div>
-  
-  <div class="w3">
-    <button class="w3-button w3-xlarge" onclick="w3_open()">☰</button>
-    <a class="navbar-brand" href="#">MyUni</a>
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout_user' %}">Logout</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Login</a>
-      </li>
-    </ul>
-    <form class="d-flex" role="search">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-  
-
-
-    <div class="col-md-6 offset-md-3 text-center">
-        <h1>Register</h1>
-        <br/>
+<br>
+<div class="p-8 bg-orange-600 w-96 mx-auto" >
+    <div class="text-center">
+        <h1 class="text-center text-3xl font-semibold mb-4"> Sign Up</h1>
         
-        <form method="POST" action="" class="mx-auto">
+        <form action="" method="POST" class="mx-auto max-w-md">
             {% csrf_token %}
-        
+            
             {% if form.errors %}
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    You Got An errors
-                    {% for field in form %}
-                        {% if field.errors %}
-                            {{ field.errors }}
-                        {% endif %}
-                    {% endfor %}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+              <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                  <strong class="font-bold">You Got An errors</strong>
+                  <ul class="mt-1 list-disc list-inside">
+                      {% for field in form %}
+                      {% if field.errors %}
+                          {{ field.errors }}
+                      {% endif %}
+                  {% endfor %}
+                  </ul>
+                  <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" data-dismiss="alert">
+                      <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <title>Close</title>
+                          <path d="M14.354 5.646a.5.5 0 00-.708 0L10 9.293 5.354 5.646a.5.5 0 10-.708.708L9.293 10l-4.647 4.646a.5.5 0 00.708.708L10 10.707l4.646 4.647a.5.5 0 00.708-.708L10.707 10l4.647-4.646a.5.5 0 000-.708z"/>
+                      </svg>
+                  </button>
+              </div>
             {% endif %}
-        
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-secondary">Register</button>
+            <div class="mb-4">
+              {{ form.username }}
+            </div>
+            <div class="mb-4">
+              {{ form.email }}
+            </div>
+            <div class="mb-4">
+              {{ form.password1 }}
+            </div>
+            <div class="mb-4">
+              {{ form.password2 }}
+            </div>
+            <button type="submit" class="bg-teal-600 text-white py-2 px-4 rounded">Sign Up</button>
+            <div class="text-center mt-4">
+                <p>Already have an account? <a href="{% url 'login_user' %}" class="text-teal-600"> Login </a></p>
+            </div>
         </form>
-    </div>
+      </div>
+</div>
 
-<script>
-    function w3_open() {
-        document.getElementById("mySidebar").style.display = "block";
-      }
-      function w3_close() {
-        document.getElementById("mySidebar").style.display = "none";
-      }
-</script>
-
-</body>
-</html>
 
 {% endblock %}
+

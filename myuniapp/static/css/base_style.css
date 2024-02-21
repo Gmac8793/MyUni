@@ -8,8 +8,9 @@ body {
     font-family: sans-serif;
 }
 nav {
-    background: pink;
+    background: #ea580c;
     padding: 5px 20px;
+    color: white;
 }
 ul {
    list-style-type: none; 
@@ -50,7 +51,7 @@ a:hover {
     font-size: 20px;
 }
 .button .secondary {
-    border-bottom: 1px #444 solid;
+    border-bottom: 1px #727070 solid;
 }
 /*mobile menu*/
 .menu {
@@ -63,14 +64,14 @@ a:hover {
     cursor: pointer;
 }
 .bars {
-    background: #999;
+    background: white;
     display: inline-block;
     height: 2px;
     position: relative;
     width: 18px;
 }
 .bars::before,.bars::after {
-    background: #999;
+    background: white;
     content: "";
     display: inline-block;
     height: 2px;
@@ -108,7 +109,7 @@ a:hover {
         text-decoration: none;
         padding: 7px 15px;
         background: teal;
-        border: 1px solid #006d6d;
+        border: 1px solid teal;
         border-radius: 50em;
     }
     .button.secondary a {
@@ -118,11 +119,11 @@ a:hover {
         transition: all .25s;
     }
     .button:not(.secondary) a:hover {
-        background: #006d6d;
-        border-color: #005959;
+        background: teal;
+        border-color: teal;
     }
     .button.secondary a:hover {
-        color: #ddd;
+        color: #115e59;
     }
 }
 
@@ -150,5 +151,9 @@ a:hover {
         padding-right: 0;
     }
     
-    
 }
+#map {
+    height: 700px; 
+    width: 100%;   
+  }
+
