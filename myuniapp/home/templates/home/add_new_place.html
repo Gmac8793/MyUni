@@ -1,9 +1,31 @@
+{% extends 'home/base.html' %}
 {% block content %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Add This Place</button>
-  </form>
-
+<div class="m-8">
+  <div class="max-w-md mx-auto bg-gray-200 p-3" >
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-4">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+      </div>
+      <div class="mb-4">
+        {{ form.detail.label_tag }}
+        {{ form.detail }}
+      </div>
+      <div class="mb-4">
+        {{ form.latitude.label_tag }}
+        {{ form.latitude }}
+      </div>
+      <div class="mb-4">
+        {{ form.longitude.label_tag }}
+        {{ form.longitude }}
+      </div>
+      <div class="mb-4">
+        {{ form.image.label_tag }}
+        {{ form.image }}
+      </div>
+      <button type="submit" class="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Add This Place</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

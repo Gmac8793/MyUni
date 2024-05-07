@@ -1,0 +1,22 @@
+<div class="flex items-center gap-4 [&>a:hover]:underline">
+    <div class="flex items-center gap-1">
+        {% if user in post.likes.all %}
+          <img src="/static/images/like-filled.png" width="28" height="28" alt="">
+        {% else %}
+          <img src="/static/images/like.png" width="28" height="28" alt="">
+        {% endif %}
+        {{ post.likes.count }}
+      </div>
+      {% if user.is_authenticated and user != post.user %}
+        <a class="cursor-pointer"
+        hx-get="{% url 'like-post' post.id %}" 
+        hx-target="closest div" 
+        hx-swap="outerHTML">
+          {% if user in post.likes.all %}
+            <b>ยกเลิก</b>
+          {% else %}
+            ถูกใจ
+          {% endif %}
+        </a>    
+      {% endif %}
+</div>

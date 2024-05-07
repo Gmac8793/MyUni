@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Create Event</title>
+</head>
+<body class="bg-gray-300 min-h-screen flex items-center justify-center">
+    <div class="bg-yellow-400  max-w-md p-8 rounded shadow-xl">
+        <div class="">
+            <h1 class="text-3xl text-center text-white font-bold mb-4">Create Event</h1>
+            <form method="post" action="" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
+                    <input type="text" id="title" name="title" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="detail" class="block text-sm font-medium text-gray-700">Detail:</label>
+                    <textarea id="detail" name="detail" required rows="3" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4">
+                    <div>
+                        <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date:</label>
+                        <input type="date" id="start_date" name="start_date" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="end_date" class="block text-sm font-medium text-gray-700">End Date:</label>
+                        <input type="date" id="end_date" name="end_date" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                </div>
+                <div>
+                    <label for="event_image" class="block text-sm font-medium text-gray-700">Image:</label>
+                    <input type="file" id="event_image" name="event_image" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2">Create This Event</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -6,11 +6,11 @@
 #map { height: 500px; }
 body {
     font-family: sans-serif;
+   
 }
 nav {
-    background: #ea580c;
     padding: 5px 20px;
-    color: white;
+    background-color: #E3B061;
 }
 ul {
    list-style-type: none; 
@@ -108,8 +108,8 @@ a:hover {
     .button a {
         text-decoration: none;
         padding: 7px 15px;
-        background: teal;
-        border: 1px solid teal;
+        background: #F8CB2E;
+        border: 1px solid white;
         border-radius: 50em;
     }
     .button.secondary a {
@@ -119,11 +119,11 @@ a:hover {
         transition: all .25s;
     }
     .button:not(.secondary) a:hover {
-        background: teal;
-        border-color: teal;
+        background: #F8CB2E;
+        border-color: white;
     }
     .button.secondary a:hover {
-        color: #115e59;
+        color: #fff;
     }
 }
 

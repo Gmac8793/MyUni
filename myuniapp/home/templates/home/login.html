@@ -1,23 +1,43 @@
 {% extends 'home/base.html' %}
 {% block content %}
 
-<br>
-<div class="p-8 bg-orange-600 w-96 mx-auto">
-  <div class="text-center">
-    <h1 class="text-center text-3xl font-semibold mb-4">Login</h1>
-    <form method="POST" class="mx-auto max-w-md" action="{% url 'login_user' %}">
-        {% csrf_token %}
-       
-        <div class="mb-4">
-          {{ form.username }}
+<section class="bg-yellow-200 md:h-screen">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:lg:py-24">
+        <div class="w-full bg-white rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                    Login
+                </h1>
+                <form method="post" action="{% url 'login_user' %}" enctype="multipart/form-data" class="space-y-4 md:space-y-6">
+                    {% csrf_token %}
+                      <div>
+                          <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                          <input type="text" id="username" name="username" required class="mt-1 focus:ring-blue-500 focus:border-gray-600 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2.5" placeholder="Username" autocomplete="username">
+                      </div>
+                      <div>
+                          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                          <input type="password" id="password" name="password" required rows="3" class="mt-1 focus:ring-gray-500 focus:border-gray-600 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2.5" placeholder="Password" autocomplete="current-password">
+                      </div>
+                      <button type="submit" class="w-full text-white bg-black hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login</button>
+                      <p class="text-sm font-light text-gray-500">
+                          Don't have an account? <a href="{% url 'signup' %}" class="font-medium text-primary-600 hover:underline">Sign Up</a>
+                      </p>
+                  </form>
+          
+            </div>
         </div>
-        <div class="mb-4">
-          {{ form.password }}
-        </div>
-        <button type="submit" class="bg-teal-600 text-white py-2 px-4 rounded">Login</button>
-    </form>
-  </div>
-</div>
+    </div>
+  </section>
+
+
+<script>
+const menuIcon = document.getElementById('menu-icon');
+const userMenu = document.getElementById('navbar-user');
+
+menuIcon.addEventListener('click', function() {
+userMenu.classList.toggle('hidden');
+});
+</script>
 
 
 {% endblock%}

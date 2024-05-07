@@ -1,8 +1,35 @@
-<h1>Want to share anything?</h1>
-<br>
-<form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+<body class="bg-gray-300 min-h-screen flex items-center justify-center">
+    <div class="bg-yellow-400  max-w-md p-8 rounded shadow-xl">
+        <div class="">
+            <h1 class="text-3xl text-center text-white font-bold mb-4">Create Post</h1>
+            <form method="post" action="" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
+                    <input type="text" id="title" name="title" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="content" class="block text-sm font-medium text-gray-700">Content:</label>
+                    <textarea id="content" name="content" required rows="3" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                </div>
+                <div>
+                    <label for="image" class="block text-sm font-medium text-gray-700">Image:</label>
+                    <input type="file" id="image" name="image" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2">Post</button>
+                </div>
+            </form>
+        </div>
 
-    <button type="submit"><a href="{% url 'feed' "></a>Post</button>
-</form>
+    </div>
+</body>
+</html>

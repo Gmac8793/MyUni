@@ -1,0 +1,63 @@
+<div class="max-w-4xl py-4 xl:px-12 flex justify-center mx-auto bg-yellow-200 border border-white shadow-xl" >
+  <div class="w-full ">
+    <div class="max-w-5xl mx-auto p-4">
+        <div class="flex items-center mb-4">
+            <div class="flex-shrink-0">
+                <img src="{{ comment.user.profile.profileimg.url }}" alt="" class="object-cover w-12 h-12 rounded-full">
+            </div>
+            <div class="ml-4">
+                <h3 class="text-lg font-semibold text-gray-800">{{ comment.user.username }}</h3>
+                <p class="text-sm text-gray-600">{{ comment.created_at }}</p>
+            </div>
+        </div>
+        <div>
+            <p class="text-base text-gray-800 break-words">{{ comment.content }}</p>
+            <!-- Display comment images -->
+            {% for comment_image in comment.postcommentimage_set.all %}
+            <div class="mt-2 w-32 h-32 object-cover rounded-lg">
+                <img src="{{ comment_image.image.url }}" alt="Comment Image" class="w-full h-auto">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="flex items-center gap-4 [&>a:hover]:underline">
+            <!-- Likes comment -->
+            {% include 'social_app/likes_comment.html' %}
+            
+            <a href="#" class="text-gray-600 hover:text-gray-800"><i class="fas fa-reply"></i>{{ comment.replies.count }}</a>
+            {% if user.is_authenticated and comment.user == user %}
+            <div>
+                <a href="{% url 'comment-delete' comment.id %}" class="text-gray-600 hover:text-gray-800"><i class="fas fa-trash-alt"></i></a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Form for replying to the comment -->
+        <div class="mt-4">
+            <form method="POST" action="{% url 'reply-sent' comment.id %}" class="replyform flex" autocomplete="off" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="pr-4">
+                    {{ replyform.content }}
+                </div>
+                <div class="pr-4">
+                    <label for="image-upload" class="mr-4 cursor-pointer">
+                        <i class="fas fa-image text-gray-600 text-2xl"></i>
+                        <input type="file" id="image-upload" name="image" class="hidden" accept="image/*">
+                    </label>
+                    <!--  <span class="text-gray-600"></span> -->
+                </div>
+                <button class="text-white text-sm px-2 py-2 bg-black" type="submit">ตอบกลับ</button>
+            </form>
+        </div>
+        <!-- Display replies -->
+        <div class="mt-4">
+            {% for reply in comment.replies.all %}
+            <div class="flex items-center">
+                <!-- Include reply template -->
+                {% include 'social_app/reply.html' %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+  </div>
+</div>

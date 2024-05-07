@@ -7,93 +7,242 @@
     <!--<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">-->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Feed Page</title>
     <style>
-       body {
-        background-color: #ffedd5;
-        color: #8F6C59;
-       }
+      #user-dropdown {
+        position: absolute;
+        top: 3rem;
+        right: 2rem;
+    }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <div class="flex flex-col md:flex-row h-screen">
-    <!-- Sidebar -->
-    <div class="bg-orange-600 text-white w-64 flex-shrink-0">
-      <!-- Sidebar content -->
-      <div class="p-4">
-        <div class="logo text-xl font-bold"><a href="{% url 'home' %}">MyUni</a></div>
-        
-        <!-- Navigation links -->
-        <ul class="mt-4">
-          <li>
-            <a href="#" class="block py-2 px-4 text-sm">Profile</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-4 text-sm">Feed</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-4 text-sm">Notification</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-4 text-sm">Follower</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-4 text-sm">Event</a>
-          </li>
-          <li>
-            <a href="{% url 'create_post' place_id=place.id %}" class="block py-2 px-4 text-sm">Post</a>
-          </li>
-        </ul>
+<nav class="fixed top-0 z-50 w-full bg-white bg-yellow-400 border-b border-white">
+  <div class="px-3 py-3 lg:px-5 lg:pl-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center justify-start rtl:justify-end">
+        <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" id="menu-icon" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+            <span class="sr-only">Open sidebar</span>
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+               <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+            </svg>
+         </button>
+        <a href="{% url 'home' %}" class="flex ms-2 md:me-24">
+          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">MyUni</span>
+        </a>
       </div>
-    </div>
-  
-    <!-- Main content area -->
-    <div class="flex-1">
-      <!-- Your main content here -->
-      <div class="p-4">
-
-        <header>        
-          <div class="p-8 text-center ">
-              <h1 class="text-3xl">{{ place.name }}</h1>
-          </div>
-        </header>
-      
-        <main>
-            <div class="text-center">
-                <div class="pt-6 container mx-auto">
-                    <div class="rows">
-                        
-                        {% if posts %}
-                            <div class="py-8 bg-orange-600 text-white">
-                                <ul>
-                                    {% for post in posts %}
-                                        <li class="border border-white bg-orange-600 mb-4 p-4 rounded"><a href="{% url 'post_content' post_id=post.id  %}">{{ post.title }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </div><br>
-                        {% else %}
-                            <p>ยังไม่มีโพสที่นี่</p>
-                        {% endif %}
-                
-                        <!--
-                          <div grid-rows-2>
-                            <button type="submit" class="p-4 bg-orange-600 text-white"><a href="{% url 'home' %}">Back</a></button>
-                            <button type="submit" class="p-4 bg-orange-600 text-white"><a href="{% url 'create_post' place_id=place.id %}">Post</a></button>
-                        </div>
-                        -->
-                    </div>
-                </div>
+      <div class="flex items-center">
+          <div class="flex items-center ms-3">
+            <div>
+              <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" id="user-menu-button" data-dropdown-toggle="user-dropdown">
+                <span class="sr-only">Open user menu</span>
+                <img class="w-8 h-8 rounded-full" src="{{ profile.profileimg.url }}" alt="{{ profile.user.username }}">
+              </button>
             </div>
-        </main>
-      </div>
+            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow" id="user-dropdown">
+              <div class="px-4 py-3" role="none">
+                <p class="text-sm text-gray-900" role="none">{{ profile.user.username }}</p>
+                <p class="text-sm font-medium text-gray-900 truncate" role="none">{{ profile.user.email }}</p>
+              </div>
+              <ul class="py-1" role="none">
+                <li>
+                  <a href="{% url 'profile' profile.user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="{% url 'logout_user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Logout</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
     </div>
+  </div>
+</nav>
+
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-yellow-200 border-r border-white sm:translate-x-0" aria-label="Sidebar">
+   <div class="h-full px-3 pb-4 overflow-y-auto">
+      <ul class="space-y-2 font-medium">
+        <li>
+          <a href="{% url 'home' %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+            <i class="fas fa-home"></i>
+             <span class="ms-3">Home</span>
+          </a>
+        </li>
+        <li>
+            <a href="{% url 'profile' profile.user.username %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+              <i class="fas fa-user"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap">Profile</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+              <i class="fas fa-bell"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap">Notification</span>
+              <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-gray-900 bg-gray-100 rounded-full">3</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+              <i class="fas fa-user-friends"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap">Follower</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'create_post' place_id=place.id %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+              <i class="fas fa-pencil-alt"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap">Post</span>
+            </a>
+        </li>
+        <li>
+          <a href="{% url 'create_event' place_id=place.id %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+            <i class="fas fa-calendar-alt"></i>
+            <span class="flex-1 ms-3 whitespace-nowrap">Event</span>
+          </a>
+        </li>
+        <li>
+            <a href="{% url 'logout_user' %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+              <i class="fas fa-sign-out-alt"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
+            </a>
+        </li>
+      </ul>
+   </div>
+</aside>
+
+<div class="p-4 sm:ml-64 bg-gray-100">
+  <div class="p-4 mt-14">
+    <header class="">        
+      <div class="p-8 text-center ">
+          <h1 class="text-3xl text-black font-bold">{{ place.name }}</h1>
+      </div>
+    </header>
+  
+    <main>
+      <!-- Events show -->
+      <div class="relative px-6 pt-8 pb-4 lg:px-8 lg:pt-8 lg:pb-4">
+        {% if events %}
+        <div class="relative mx-auto max-w-7xl bg-gray-200 rounded shadow-xl border border-white">
+          <div class="text-left py-4 bg-yellow-400 rounded">
+            <h2 class="text-2xl font-bold tracking-tight text-black sm:text-2xl ps-3"><i class="fas fa-calendar-alt mr-2"></i>Events</h2>
+          </div>
+          <div class="mx-auto grid max-w-lg gap-5 p-3 lg:max-w-none lg:grid-cols-3">
+            {% for event in events %}
+              <div class="flex flex-col overflow-hidden shadow-lg rounded">
+                <div class="flex-shrink-0">
+                  {% if event.images.all %}
+                    <img class="h-48 w-full object-cover" src="{{ event.images.first.image.url }}" alt="">
+                  {% else %}
+                    <img class="h-48 w-full object-cover" src="https://www.iash.ed.ac.uk/sites/default/files/default_images/default-event.png" alt="">
+                  {% endif %}
+                </div>
+  
+  
+                <div class="flex flex-1 flex-col justify-between bg-white p-6">
+                  <div class="flex-1">
+                    <a href="#" class="mt-2 block">
+                      <p class="text-xl font-semibold text-black">{{ event.title }}</p>
+                      <p class="mt-3 text-base text-gray-600">{{ event.detail }}</p>
+                    </a>
+                  </div>
+                  <div class="mt-6 flex items-center">
+                    <div class="flex-shrink-0">
+                      <a href="#">
+                        <span class="sr-only">{{ event.user.username }}</span>
+                        <img class="h-10 w-10 rounded-full" src="{{ event.user.profile.profileimg.url }}" alt="{{ event.user.username }}">
+                      </a>
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900">
+                        <a href="#" class="hover:underline">{{ event.user.username }}</a>
+                      </p>
+                      <div class="flex space-x-1 text-sm text-gray-600">
+                        <p>Date: {{ event.start_date }} - {{ event.end_date }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+  
+        {% if posts %}
+        <div class="relative my-4 mx-auto max-w-7xl rounded text-left bg-gray-200 border border-white shadow-xl">
+          <div class="text-left py-4 bg-yellow-400 rounded">
+            <h2 class="text-2xl font-bold tracking-tight text-black sm:text-2xl ps-3"><i class="fas fa-edit mr-2"></i>Posts</h2>
+          </div>
+            <!-- {% if posts %} -->
+                <div class="text-black">
+                    <ul>
+                        {% for post in posts %}
+                            <div class="bg-amber-200 p-4 shadow-xl border border-white">
+                              <li class=" text-xl"><a href="{% url 'post_content' post_id=post.id  %}">{{ post.title }}</a></li>
+  
+                              <div id="user" class="mt-6 flex items-center">
+                                <div class="flex-shrink-0">
+                                  <a href="#">
+                                    <span class="sr-only">{{ post.user.username }}</span>
+                                    <img class="h-10 w-10 rounded-full" src="{{ post.user.profile.profileimg.url }}" alt="{{ post.user.username }}">
+                                  </a>
+                                </div>
+                                <div class="ml-3">
+                                  <p class="text-sm font-medium text-gray-900">
+                                    <a href="#" class="hover:underline">{{ post.user.username }}</a>
+                                  </p>
+                                  <div class="flex space-x-1 text-sm text-gray-600">
+                                    <p>{{ post.created_at }}</p>
+                                  </div>
+                                </div>
+                                <div id="likes-comments" class="ml-auto">
+                                  <div class="flex">
+                                    <div id="likes" class="flex">
+                                      <span class="flex-1">
+                                        <img src="/static/images/like-black2.png" alt="" width="24" height="24">
+                                      </span>
+                                      <span class="pl-2">{{ post.likes.count }}</span>
+                                    </div>
+                                    <div id="comments" class="flex pl-2">
+                                      <span class="flex-1">
+                                        <img src="/static/images/comment-black.png" alt="" width="24" height="24">
+                                      </span>
+                                      <span class="pl-2">{{ post.comments.count }}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            <!-- {% endif %} -->
+          </div>
+        {% endif %}
+      </div>
+    </main>
   </div>
 </div>
 
+<script>
 
+  const menuIcon = document.getElementById("menu-icon");
+  const sidebar = document.getElementById("logo-sidebar");
 
+  menuIcon.addEventListener("click", function() {
+    sidebar.classList.toggle("-translate-x-full");
+  });
 
+  const profileImageButton = document.getElementById('user-menu-button');
+  const userDropdownMenu = document.getElementById('user-dropdown');
+
+  profileImageButton.addEventListener('click', function() {
+    userDropdownMenu.classList.toggle('hidden');
+  });
+
+</script>  
 </body>
 </html>
