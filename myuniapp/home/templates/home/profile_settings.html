@@ -7,26 +7,29 @@
     <title>Profile Settings</title>
 </head>
 <body>
-<div class="max-w-md mx-auto bg-white rounded-md overflow-hidden shadow-md">
+<div class="max-w-md mx-auto bg-yellow-400 mt-16 rounded overflow-hidden shadow-md">
     <div class="p-4">
-        <h1>Complete Your Profile</h1>
+        <h1 class="text-white text-xl font-bold text-center">Complete Your Profile</h1>
         <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
             
             <div>
-                <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                <label for="bio" class="block text-sm font-medium text-gray-600 mb-1">Bio:</label>
                 <textarea name="bio" id="bio" rows="4" class="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter your bio...">{{ form.bio.value }}</textarea>
             </div>
             <div>
-                <label for="profileimg" class="block text-sm font-medium text-gray-700 mb-1">Profile Image</label>
+                <label for="profileimg" class="block text-sm font-medium text-gray-600 mb-1">Profile Image:</label>
                 <input type="file" name="profileimg" id="profileimg" class="py-2 px-3 border rounded-md focus:outline-none focus:ring focus:border-blue-300">
             </div>
             <div>
-                <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <label for="location" class="block text-sm font-medium text-gray-600 mb-1">Location:</label>
                 <input type="text" id="location" name="location" class="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter your location..." value="{{ form.location.value }}">
             </div>
             <div class="flex justify-center">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Changes</button>
+                <button type="submit" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Changes</button>
+            </div>
+            <div class="flex justify-center">
+                <a href="{{ referer_url }}" class="text-gray-600 px-4 py-2 hover:text-gray-900">ย้อนกลับ</a>
             </div>
         </form>
     </div>

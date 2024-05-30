@@ -11,46 +11,99 @@
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
 <style>
-  
+  #map {
+    position: relative;
+    z-index: 1;
+    height: 60vh;
+    width: 40vw;
+  }
+  #user-dropdown {
+    position: absolute;
+    top: 3rem;
+    right: 2rem;
+  }
+  .logo-font {
+    font-family: 'Pacifico', cursive;
+  }
 </style>
 </head>
 
-
 <body>
 
-<nav class="bg-yellow-400 border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="{% url 'home' %}" class="flex items-center space-x-3 rtl:space-x-reverse" style="text-decoration: none;">
-        <span class="self-center text-2xl font-semibold whitespace-nowrap">MyUni</span>
-    </a>
-    <button data-collapse-toggle="navbar-user" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-800 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" id="menu-icon" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
-    </button>
-    <div class="hidden w-full md:block md:w-auto" id="navbar-user">
-      <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
-        {% if user.is_authenticated %}
-        <li>
-          <a href="{% url 'profile' profile.user.username %}" class="block py-2 px-3 text-white bg-black rounded md:bg-transparent md:text-white md:p-0" aria-current="page" style="text-decoration: none;"><i class="fas fa-user mr-2 text-lg md:text-xl"></i><span class="md:hidden">{{ user.username }}</span></a>
-        </li>
-        <li>
-          <a href="{% url 'logout_user' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0" style="text-decoration: none;"><i class="fas fa-sign-out-alt mr-2 text-lg md:text-xl"></i><span class="md:hidden">Logout</span></a>
-        </li>
-        {% else %}
-        <li>
-          <a href="{% url 'login_user' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0" style="text-decoration: none;"><i class="fas fa-sign-in-alt mr-2 text-lg md:text-xl"></i><span class="md:hidden">Login</span></a>
-        </li>
-        <li>
-          <a href="{% url 'signup' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0" style="text-decoration: none;"><i class="fas fa-user-plus mr-2 text-lg md:text-xl"></i><span class="md:hidden">Sign Up</span></a>
-        </li>
-        {% endif %}
-      </ul>
+  <nav class="bg-yellow-400 border-gray-200">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between px-6">
+        <div class="flex items-center justify-start rtl:justify-end">
+          
+          <a href="{% url 'home' %}" class="logo-font flex ms-2 md:me-24 text-white" style="text-decoration: none;">
+            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">MyUni</span>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <div class="w-full flex md:w-auto">
+            <ul class="flex flex-row justify-between gap-2 font-medium p-4 md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
+              {% if user.is_authenticated %}
+              <li>
+                <button class="text-white logo-font text-lg hover:text-gray-50">
+                  <a href="{% url 'event_calendar' %}" class="block md:bg-transparent md:p-0" aria-current="page" style="text-decoration: none;">Calendar</a>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="relative flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" id="user-menu-button" data-dropdown-toggle="user-dropdown">
+                  <span class="sr-only">Open user menu</span>
+                  <img class="w-8 h-8 rounded-full" src="{{ profile.profileimg.url }}" alt="{{ profile.user.username }}">
+                  {% if unread_notifications_count > 0 %}
+                    <span class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs">{{ unread_notifications_count }}</span>
+                  {% endif %} 
+                </button>
+              </li>
+              {% else %}
+              <li>
+                <a href="{% url 'login_user' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0" style="text-decoration: none;">Login</a>
+              </li>
+              <li>
+                <a href="{% url 'signup' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0" style="text-decoration: none;">Sign Up</a>
+              </li>
+              {% endif %}
+            </ul>
+            
+          </div>
+
+          {% if user.is_authenticated %}
+          <div class="z-50 hidden my-4 text-base list-none bg-yellow-50 divide-y divide-gray-100 rounded shadow" id="user-dropdown">
+              <div class="px-4 py-3" role="none">
+                <a href="{% url 'profile' user.username %}" style="text-decoration: none;"><p class="text-sm text-gray-900" role="none">{{ profile.user.username }}</p></a>
+                <p class="text-sm font-medium text-gray-900 truncate" role="none">{{ profile.user.email }}</p>
+              </div>
+              <ul class="py-1" role="none">
+                <li>
+                  <a href="{% url 'notifications' %}" class="block px-4 py-2 text-sm text-gray-700 hover:text-white hover:bg-gray-400 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" style="text-decoration: none;">
+                    Notifications
+                    {% if unread_notifications_count %}
+                    <span class="inline-flex items-center justify-center w-3 h-3 p-3 text-sm font-medium text-gray-900 bg-gray-100 rounded-full">
+                      {% if unread_notifications_count > 0  %}
+                        {{ unread_notifications_count }}
+                      {% endif %}
+                    </span>
+                    {% endif %}
+                  </a>
+                </li>
+                <li>
+                  <a href="{% url 'profile_settings' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style="text-decoration: none;" role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="{% url 'logout_user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style="text-decoration: none;" role="menuitem">Logout</a>
+                </li>
+              </ul>
+          </div>
+          {% endif %}
+        </div>
+          
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
 
   {% block content %}
@@ -159,12 +212,12 @@ places.forEach(place => {
 
 
 //navbar icon
-const menuIcon = document.getElementById('menu-icon');
-const userMenu = document.getElementById('navbar-user');
+  const profileImageButton = document.getElementById('user-menu-button');
+  const userDropdownMenu = document.getElementById('user-dropdown');
 
-menuIcon.addEventListener('click', function() {
-  userMenu.classList.toggle('hidden');
-});
+  profileImageButton.addEventListener('click', function() {
+    userDropdownMenu.classList.toggle('hidden');
+  });
 
 </script>
 

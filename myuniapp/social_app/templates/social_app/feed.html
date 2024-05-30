@@ -8,22 +8,25 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>Feed Page</title>
+    <title>{{ place.name }} - Feed</title>
     <style>
       #user-dropdown {
         position: absolute;
         top: 3rem;
         right: 2rem;
     }
+    .logo-font {
+      font-family: 'Pacifico', cursive;
+    }
     </style>
 </head>
-<body>
+<body class="bg-gray-200">
 
-<nav class="fixed top-0 z-50 w-full bg-white bg-yellow-400 border-b border-white">
+<nav class="fixed top-0 z-50 w-full px-8 text-white bg-yellow-400 border-b border-white">
   <div class="px-3 py-3 lg:px-5 lg:pl-3">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between p-2">
       <div class="flex items-center justify-start rtl:justify-end">
         <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" id="menu-icon" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
             <span class="sr-only">Open sidebar</span>
@@ -32,28 +35,45 @@
             </svg>
          </button>
         <a href="{% url 'home' %}" class="flex ms-2 md:me-24">
-          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">MyUni</span>
+          <span class="logo-font self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">MyUni</span>
         </a>
       </div>
       <div class="flex items-center">
-          <div class="flex items-center ms-3">
+          <div class="flex items-center ms-3 justify-between gap-6">
+            <a href="{{ referer_url }}" class="text-white logo-font">Back</a>
+            <a href="{% url 'home' %}" class="text-white logo-font">Home</a>
             <div>
-              <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" id="user-menu-button" data-dropdown-toggle="user-dropdown">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="{{ profile.profileimg.url }}" alt="{{ profile.user.username }}">
-              </button>
+              <button type="button" class="relative flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" id="user-menu-button" data-dropdown-toggle="user-dropdown">
+                  <span class="sr-only">Open user menu</span>
+                  <img class="w-8 h-8 rounded-full" src="{{ profile.profileimg.url }}" alt="{{ profile.user.username }}">
+                  {% if unread_notifications_count > 0 %}
+                    <span class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs">{{ unread_notifications_count }}</span>
+                  {% endif %} 
+                </button>
             </div>
             <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow" id="user-dropdown">
               <div class="px-4 py-3" role="none">
-                <p class="text-sm text-gray-900" role="none">{{ profile.user.username }}</p>
+                <a href="{% url 'profile' user.username %}"><p class="text-sm text-gray-900" role="none">{{ profile.user.username }}</p></a>
                 <p class="text-sm font-medium text-gray-900 truncate" role="none">{{ profile.user.email }}</p>
               </div>
               <ul class="py-1" role="none">
                 <li>
-                  <a href="{% url 'profile' profile.user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
+                  <a href="{% url 'notifications' %}" class="block px-4 py-2 text-sm text-gray-700 hover:text-white hover:bg-yellow-200">
+                    Notifications
+                    {% if unread_notifications_count %}
+                      <span class="inline-flex items-center justify-center w-3 h-3 p-3 text-sm font-medium text-gray-900 bg-gray-100 rounded-full">
+                        {% if unread_notifications_count > 0  %}
+                          {{ unread_notifications_count }}
+                        {% endif %}
+                      </span>
+                    {% endif %}
+                  </a>
                 </li>
                 <li>
-                  <a href="{% url 'logout_user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Logout</a>
+                  <a href="{% url 'profile' profile.user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-200" role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="{% url 'logout_user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-200" role="menuitem">Logout</a>
                 </li>
               </ul>
             </div>
@@ -63,7 +83,7 @@
   </div>
 </nav>
 
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-yellow-200 border-r border-white sm:translate-x-0" aria-label="Sidebar">
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-24 transition-transform -translate-x-full bg-yellow-200 border-r border-white sm:translate-x-0" aria-label="Sidebar">
    <div class="h-full px-3 pb-4 overflow-y-auto">
       <ul class="space-y-2 font-medium">
         <li>
@@ -79,18 +99,24 @@
             </a>
         </li>
         <li>
-            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+            <a href="{% url 'notifications' %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
               <i class="fas fa-bell"></i>
               <span class="flex-1 ms-3 whitespace-nowrap">Notification</span>
-              <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-gray-900 bg-gray-100 rounded-full">3</span>
+              {% if unread_notifications_count %}
+                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-gray-900 bg-gray-100 rounded-full">
+                  {% if unread_notifications_count > 0  %}
+                    {{ unread_notifications_count }}
+                  {% endif %}
+                </span>
+              {% endif %}
             </a>
         </li>
-        <li>
+        <!-- <li>
             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
               <i class="fas fa-user-friends"></i>
               <span class="flex-1 ms-3 whitespace-nowrap">Follower</span>
             </a>
-        </li>
+        </li> -->
         <li>
             <a href="{% url 'create_post' place_id=place.id %}" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
               <i class="fas fa-pencil-alt"></i>
@@ -113,11 +139,17 @@
    </div>
 </aside>
 
-<div class="p-4 sm:ml-64 bg-gray-100">
+<div class="p-4 sm:ml-64">
   <div class="p-4 mt-14">
     <header class="">        
-      <div class="p-8 text-center ">
-          <h1 class="text-3xl text-black font-bold">{{ place.name }}</h1>
+      <div class="relative p-8 text-center ">
+        <!-- {% if place.images.all %}
+          <div class="relative">
+            <img src="{{ place.images.first.image.url }}" alt="{{ place.name }}" class="w-full h-64">
+          </div>
+        {% endif %} -->
+          <h1 class="text-3xl text-gray-700 font-bold">{{ place.name }}</h1>
+          <p class="text-md mt-4 text-gray-600">{{ place.detail }}</p>
       </div>
     </header>
   
@@ -125,9 +157,9 @@
       <!-- Events show -->
       <div class="relative px-6 pt-8 pb-4 lg:px-8 lg:pt-8 lg:pb-4">
         {% if events %}
-        <div class="relative mx-auto max-w-7xl bg-gray-200 rounded shadow-xl border border-white">
-          <div class="text-left py-4 bg-yellow-400 rounded">
-            <h2 class="text-2xl font-bold tracking-tight text-black sm:text-2xl ps-3"><i class="fas fa-calendar-alt mr-2"></i>Events</h2>
+        <div class="relative mx-auto max-w-7xl bg-white bg-opacity-50  shadow-xl border border-white">
+          <div class="text-left py-4 bg-yellow-200 ">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-700 sm:text-2xl ps-3"><i class="fas fa-calendar-alt mr-2"></i>Events</h2>
           </div>
           <div class="mx-auto grid max-w-lg gap-5 p-3 lg:max-w-none lg:grid-cols-3">
             {% for event in events %}
@@ -143,7 +175,7 @@
   
                 <div class="flex flex-1 flex-col justify-between bg-white p-6">
                   <div class="flex-1">
-                    <a href="#" class="mt-2 block">
+                    <a href="{% url 'event_details' event.id %}" class="mt-2 block">
                       <p class="text-xl font-semibold text-black">{{ event.title }}</p>
                       <p class="mt-3 text-base text-gray-600">{{ event.detail }}</p>
                     </a>
@@ -172,15 +204,15 @@
         {% endif %}
   
         {% if posts %}
-        <div class="relative my-4 mx-auto max-w-7xl rounded text-left bg-gray-200 border border-white shadow-xl">
-          <div class="text-left py-4 bg-yellow-400 rounded">
-            <h2 class="text-2xl font-bold tracking-tight text-black sm:text-2xl ps-3"><i class="fas fa-edit mr-2"></i>Posts</h2>
+        <div class="relative my-4 mx-auto max-w-7xl rounded text-left bg-white border border-white">
+          <div class="text-left py-4 bg-yellow-200">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-700 sm:text-2xl ps-3"><i class="fas fa-edit mr-2"></i>Posts</h2>
           </div>
             <!-- {% if posts %} -->
                 <div class="text-black">
                     <ul>
                         {% for post in posts %}
-                            <div class="bg-amber-200 p-4 shadow-xl border border-white">
+                            <div class="bg-white bg-opacity-50 p-4 border border-gray-100">
                               <li class=" text-xl"><a href="{% url 'post_content' post_id=post.id  %}">{{ post.title }}</a></li>
   
                               <div id="user" class="mt-6 flex items-center">
@@ -198,20 +230,16 @@
                                     <p>{{ post.created_at }}</p>
                                   </div>
                                 </div>
-                                <div id="likes-comments" class="ml-auto">
-                                  <div class="flex">
-                                    <div id="likes" class="flex">
-                                      <span class="flex-1">
-                                        <img src="/static/images/like-black2.png" alt="" width="24" height="24">
-                                      </span>
-                                      <span class="pl-2">{{ post.likes.count }}</span>
-                                    </div>
-                                    <div id="comments" class="flex pl-2">
-                                      <span class="flex-1">
-                                        <img src="/static/images/comment-black.png" alt="" width="24" height="24">
-                                      </span>
-                                      <span class="pl-2">{{ post.comments.count }}</span>
-                                    </div>
+                                <div id="likes-comments" class="ml-auto flex items-center gap-4">
+                                  <div id="likes" class="">
+                                    <i class="fas fa-heart text-gray-700">
+                                      <span class="text-gray-500">{{ post.likes.count }}</span>
+                                    </i>
+                                  </div>
+                                  <div id="comments" class="flex">
+                                    <i class="fas fa-comment text-gray-700">
+                                      <span class="text-gray-500">{{ post.comments.count }}</span>
+                                    </i>
                                   </div>
                                 </div>
                               </div>

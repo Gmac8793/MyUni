@@ -8,6 +8,10 @@ User = get_user_model()
 class Profile(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    follows= models.ManyToManyField('self',
+        related_name='followed_by',
+        symmetrical=False,
+        blank=True)
     bio = models.TextField(blank=True)
     profileimg = models.ImageField(upload_to='profile_images', default='default-profile.png')
     location = models.CharField(max_length=100, blank=True)
@@ -99,7 +103,9 @@ class PostCommentImage(models.Model):
 class Reply(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, default=None, on_delete=models.CASCADE, null=True, related_name="replies")
-    parent_comment = models.ForeignKey(PostComment, on_delete=models.CASCADE, related_name="replies")
+    parent_comment = models.ForeignKey(PostComment, on_delete=models.CASCADE, related_name="replies", null=True, blank=True)
+    parent_reply = models.ForeignKey('Reply', on_delete=models.CASCADE, related_name="nested_replies", null=True, blank=True)
+    level = models.IntegerField(default=1)
     content = models.TextField(default='')
     likes = models.ManyToManyField(User, related_name='likedreplies', through='LikedReply', default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -114,7 +120,7 @@ class Reply(models.Model):
 class ReplyImage(models.Model):
     id = models.AutoField(primary_key=True)
     reply = models.ForeignKey(Reply, on_delete=models.CASCADE, null=True)
-    image = models.ImageField(upload_to='post_images', blank=True)
+    image = models.ImageField(upload_to='reply_images/', blank=True)
     
     def __str__(self):
         return f'reply image for: {self.reply.id}'
@@ -135,8 +141,8 @@ class Event(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=100)
     detail = models.TextField(default='')
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateTimeField(null=True,blank=True)
+    end_date = models.DateTimeField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -149,3 +155,25 @@ class EventImage(models.Model):
     
     def __str__(self):
         return f'event image {self.event.title}'
+    
+    
+class EventMember(Event):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="events")
+    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name="event_members")
+    
+    class Meta:
+        unique_together = ["event", "member"]
+    
+    def __str__(self):
+        return f'{self.member}'
+    
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f'Notification for {self.user.username}: {self.message}'
+    
+    

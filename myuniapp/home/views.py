@@ -4,6 +4,8 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.db.models import Count
 import json
+
+from django.urls import reverse
 from .forms import *
 from .models import *
 from django.contrib.auth.decorators import login_required
@@ -12,7 +14,6 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     places = Place.objects.all()
     places_data = []
-    
     for place in places:
         place_images = place.images.all()
         image_urls = [image.image.url for image in place_images]
@@ -24,8 +25,8 @@ def home(request):
             event_data = {
                 'title': event.title,
                 'detail': event.detail,
-                'start_date': event.start_date.strftime('%Y-%m-%d'),
-                'end_date': event.end_date.strftime('%Y-%m-%d'),
+                'start_date': event.start_date.strftime('%m/%d/%Y, %H:%M:%S'),
+                'end_date': event.end_date.strftime('%m/%d/%Y, %H:%M:%S'),
             }
             events_ongoing_data.append(event_data)
             
@@ -37,14 +38,18 @@ def home(request):
             'image_urls': image_urls,
             'events_ongoing': events_ongoing_data
         }
-        places_data.append(place_data)
-        
+        places_data.append(place_data)  
     try:
         profile = request.user.profile
     except Profile.DoesNotExist:
-        profile = None
-        
-    return render(request, 'home/home.html', {'places_data': json.dumps(places_data), 'profile': profile})
+        profile = None 
+    unread_notifications_count = Notification.objects.filter(user=request.user, is_read=False).count() if request.user.is_authenticated else 0
+          
+    return render(request, 'home/home.html', {
+        'places_data': json.dumps(places_data), 
+        'profile': profile,
+        'unread_notifications_count': unread_notifications_count
+    })
    
      
 def login_user(request):
@@ -59,11 +64,9 @@ def login_user(request):
                 messages.success(request, "ยินดีต้อนรับเข้าสู่หน้าหลัก!")
                 return redirect('home')
             else:
-                messages.error(request, "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่อีกครั้ง")
-                
+                messages.error(request, "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่อีกครั้ง")   
     else:
         form = LoginForm()
-        
     return render(request, 'home/login.html', {'form': form})
         
 
@@ -92,9 +95,43 @@ def signup(request):
     return render(request, 'home/signup.html', {'form':form})
 
 def profile(request, username):
-    profile = get_object_or_404(Profile, user__username=username)
+    profile = []
+    if request.user.is_authenticated:
+        profile = get_object_or_404(Profile, user__username=username)
+        user_posts = Post.objects.filter(user=profile.user)
+        
+        if request.method == 'POST':
+            current_user_profile = request.user.profile
+            action = request.POST['follow']
+            # follow or unfollow
+            if action == 'unfollow':
+                current_user_profile.follows.remove(profile)
+            elif action == 'follow':
+                current_user_profile.follows.add(profile)
+                
+                Notification.objects.create(
+                    user=profile.user,
+                    message=f"{request.user.username} has followed you"
+                )
+            current_user_profile.save()   
+    else: 
+        user_posts = []
+        
+    follower_count = profile.followed_by.count()
+    following_count = profile.follows.count()
+    context = {
+        'profile': profile,
+        'user_posts': user_posts, 
+        'follower_count': follower_count,
+        'following_count': following_count,
+           
+    }
+    return render(request, 'home/profile.html', context)
 
-    return render(request, 'profile.html', {'profile': profile})
+
+
+            
+            
     
 #@login_required(login_url='/login/')
 def profile_settings(request):
@@ -102,10 +139,13 @@ def profile_settings(request):
         form = ProfileSettingsForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            username = request.user.profile.user.username
+            return redirect(reverse('profile', kwargs={'username': username}))
     else:
         form = ProfileSettingsForm(instance=request.user.profile)
-    return render(request, 'home/profile_settings.html', {'form': form})
+        
+    referer_url = request.META.get('HTTP_REFERER', '/')
+    return render(request, 'home/profile_settings.html', {'form': form, 'referer_url': referer_url})
 
 def add_new_place(request):
     lat = request.GET.get('lat')

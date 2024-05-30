@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Add event members</title>
+</head>
+<body class="bg-yellow-50">
+    <div class="flex items-center justify-center mt-10">
+        <div class="bg-yellow-400 rounded px-8 py-4" style="height: 40vh; width: 40vw;">
+            <h1 class="text-xl font-bold text-center text-white">Add members into {{ event.title }}</h1>
+            <div class="bg-white bg-opacity-50 rounded p-6 mt-6">
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <table class="w-full">
+                        <div class="flex">
+                            <p class="mr-4 text-gray-700">Add member:</p>
+                            {{ form.member }}
+                        </div>
+                        <tr>
+                            <td colspan="2" class="text-left py-4">
+                                <button type="submit" class="bg-gray-800 text-white py-2 px-4 rounded">Submit</button>
+                                <a href="{{ referer_url }}" class="text-gray-600 px-4 py-2 hover:text-gray-900">ย้อนกลับ</a>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

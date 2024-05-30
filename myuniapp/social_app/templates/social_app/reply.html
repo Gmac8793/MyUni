@@ -1,39 +1,70 @@
-<div class="flex items-end justify-between py-4 border-t-2 border-gray-200">
-    <div class="flex items-start">
-        {% if reply.user %}
-        <a href="{% url 'profile' reply.user.username %}" class="flex items-center">
-            <img class="w-8 h-8 object-cover rounded-full mr-2" src="{{ reply.user.profile.profileimg.url }}">
-        </a>
-        {% else %}
-        <img class="w-8 h-8 object-cover rounded-full" src="https://www.kindpng.com/picc/m/451-4517876_default-profile-hd-png-download.png">
-        {% endif %}
-        <div class="w-96">
+<div id="reply-{{ reply.id }}" class="block pt-2 mt-2 border-t-2 border-gray-200">
+    <div class="flex items-end justify-between">
+        <div class="flex items-start">
             {% if reply.user %}
-            <a class="block" href="">
-                <span class="text-sm font-bold text-gray-700">{{ reply.user.profile.username }}</span>
-                <span class="text-sm text-gray-400">@{{ reply.user.username }}</span>
+            <a href="{% url 'profile' reply.user.username %}" class="flex items-center">
+                <img class="w-8 h-8 object-cover rounded-full mr-2" src="{{ reply.user.profile.profileimg.url }}">
             </a>
             {% else %}
-            <span class="text-gray-500">no author</span>
+            <img class="w-8 h-8 object-cover rounded-full" src="https://www.kindpng.com/picc/m/451-4517876_default-profile-hd-png-download.png">
             {% endif %}
-            <div class="reply-content mt-2 py-4 text-base text-gray-800 md:text-normal" style="max-width: 100%; word-wrap: break-word;">{{ reply.content }}</div>
-            <!-- reply image -->
-            {% if reply.replyimage_set.all %}
-                {% for image in reply.replyimage_set.all %}
-                    <div class="mt-2 w-32 h-32 object-cover rounded-lg">
-                        <img src="{{ image.image.url }}" alt="Reply Image">
-                    </div>
-                {% endfor %}
-            {% endif %}
-            
-            <div class="">
-                {% if user.is_authenticated and reply.user == user %}
-                    <a href="{% url 'reply-delete' reply.id %}" class="text-gray-600 hover:text-gray-800"><i class="fas fa-trash-alt"></i></a>
+            <div class="w-96">
+                {% if reply.user %}
+                <a class="block" href="">
+                    <span class="text-sm font-bold text-gray-700">{{ reply.user.profile.username }}</span>
+                    <span class="text-sm text-gray-400">@{{ reply.user.username }}</span>
+                </a>
+                {% else %}
+                <span class="text-gray-500">no author</span>
                 {% endif %}
+                <div class="reply-content mt-2 py-4 text-base text-gray-800 md:text-normal" style="max-width: 100%; word-wrap: break-word;">{{ reply.content }}</div>
+                
+                
+                <div class="flex gap-4">
+                    {% include 'social_app/likes_reply.html' %}
+                    {% if user.is_authenticated and reply.user == user %}
+                        <a class="cursor-pointer text-gray-600 hover:text-gray-800"
+                            hx-get="{% url 'reply-delete' reply.id %}"
+                            hx-target="#reply-{{ reply.id }}"
+                            hx-swap="outerHTML">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    {% endif %}
+                </div>
+
             </div>
 
         </div>
-
+    </div>
+    <div class="ml-10">
+        {% if reply.level < 5 %}
+        <a class="font-bold hover:underline text-xs cursor-pointer"
+            hx-get="{% url 'reply-form' reply.id %}"
+            hx-target="this"
+            hx-swap="outerHTML">
+            Reply
+        </a>
+        {% endif %}
+        <div class="mt-2">
+            {% for nested_reply in reply.replies.all %}
+            {% include 'social_app/reply.html' with reply=nested_reply %}
+            {% endfor%}
+        </div>
     </div>
     
 </div> 
+
+
+
+{% if reply.parent_reply.id %}
+<div class="hidden">
+<a id="replylink-{{ reply.parent_reply.id }}"
+class="font-bold hover:underline text-xs cursor-pointer"
+    hx-get="{% url 'reply-form' reply.parent_reply.id %}"
+    hx-target="this"
+    hx-swap="outerHTML"
+    hx-swap-oob="true">
+    Reply
+</a>
+</div>
+{% endif %}
