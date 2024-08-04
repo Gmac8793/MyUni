@@ -9,12 +9,12 @@
 <body class="bg-yellow-50">
     <div class="flex items-center justify-center mt-10">
         <div class="bg-yellow-400 bg-opacity-75 px-8 py-4" style="height: 40vh; width: 40vw;">
-            <h1 class="text-xl font-bold text-center text-white">Remove this event</h1>
+            <h1 class="text-xl font-bold text-center text-white">ลบกิจกรรมนี้</h1>
             <div class="bg-yellow-50 rounded p-6 mt-6">
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <p class="pb-6">Are you sure you want to remove this event?</p>
-                    <button class="bg-red-500 text-white py-1 px-3 rounded" type="submit">Remove</button>
+                    <p class="pb-6">คุณแน่ใจหรือไม่ ต้องการลบกิจกรรมนี้?</p>
+                    <button class="bg-red-500 text-white py-1 px-3 rounded" type="submit">ยืนยันการลบ</button>
                     <a href="{{ referer_url }}" class="text-gray-600 px-4 py-2 hover:text-gray-900">ย้อนกลับ</a>
                 </form>
             </div>

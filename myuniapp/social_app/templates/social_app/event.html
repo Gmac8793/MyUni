@@ -4,40 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>Create Event</title>
+    <title>Create Event Page</title>
 </head>
-<body class="bg-gray-300 min-h-screen flex items-center justify-center">
-    <div class="bg-yellow-400  max-w-md p-8 rounded shadow-xl">
+<body class="bg-yellow-50 min-h-screen flex items-center justify-center">
+    <div class="bg-yellow-400 max-w-lg p-8 rounded shadow-xl w-full">
         <div class="">
-            <h1 class="text-3xl text-center text-white font-bold mb-4">Create Event</h1>
-            <form method="post" action="" enctype="multipart/form-data" class="space-y-4">
-                {% csrf_token %}
-                <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
-                    <input type="text" id="title" name="title" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                </div>
-                <div>
-                    <label for="detail" class="block text-sm font-medium text-gray-700">Detail:</label>
-                    <textarea id="detail" name="detail" required rows="3" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-x-4">
+            <h1 class="text-3xl text-center text-white font-bold mb-4">สร้างกิจกรรม</h1>
+            <div class="bg-white bg-opacity-50 rounded p-2">
+                <form method="post" action="" enctype="multipart/form-data" class="space-y-4">
+                    {% csrf_token %}
                     <div>
-                        <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date:</label>
-                        <input type="date" id="start_date" name="start_date" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        <label for="title" class="block text-sm font-medium text-gray-700">หัวข้อ:</label>
+                        <input type="text" id="title" name="title" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
                     <div>
-                        <label for="end_date" class="block text-sm font-medium text-gray-700">End Date:</label>
-                        <input type="date" id="end_date" name="end_date" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        <label for="detail" class="block text-sm font-medium text-gray-700">รายละเอียด:</label>
+                        <textarea id="detail" name="detail" required rows="3" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
                     </div>
-                </div>
-                <div>
-                    <label for="event_image" class="block text-sm font-medium text-gray-700">Image:</label>
-                    <input type="file" id="event_image" name="event_image" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                </div>
-                <div>
-                    <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2">Create This Event</button>
-                </div>
-            </form>
+                    <div class="grid grid-cols-2 gap-x-4">
+                        <div>
+                            <label for="start_date" class="block text-sm font-medium text-gray-700">เริ่ม:</label>
+                            <input type="datetime-local" id="start_date" name="start_date" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="end_date" class="block text-sm font-medium text-gray-700">สิ้นสุด:</label>
+                            <input type="datetime-local" id="end_date" name="end_date" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="event_image" class="block text-sm font-medium text-gray-700">เพิ่มรูปภาพ:</label>
+                        <input type="file" id="event_image" name="event_image" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2">สร้างกิจกรรม</button>
+                    </div>
+                </form>
+            </div>
+            <div class="text-md text-center pt-4">
+                <a href="{% url 'feed' %}?id={{ place_id }}" class="text-white">ย้อนกลับ</a>
+            </div>
         </div>
 
     </div>

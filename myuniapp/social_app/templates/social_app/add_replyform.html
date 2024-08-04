@@ -1,12 +1,12 @@
 <a id="replylink-{{ reply.id }}"></a>
 
-<form class="replyform flex mt-2" autocomplete="off"
+<form class="replyform flex justify-between mt-2" autocomplete="off"
     hx-post="{% url 'reply-form' reply.id %}"
     hx-target="this"
     hx-swap="outerHTML">
     {% csrf_token %}
     {{ replyform }}
-    <button class="text-gray-800 text-sm font-bold pl-2" type="submit">Reply</button>
+    <button class=" bg-gray-800 text-white" type="submit">Reply</button>
 </form>
 
 

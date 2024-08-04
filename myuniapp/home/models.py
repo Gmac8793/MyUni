@@ -1,13 +1,18 @@
 from django.utils import timezone
 from django.db import models
-from django.contrib.auth import get_user_model
-import uuid
+from django.contrib.auth.models import AbstractUser
 
-User = get_user_model()
+#User = get_user_model()
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+    is_admin = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.email
 
 class Profile(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField("home.User", on_delete=models.CASCADE, related_name='profile')
     follows= models.ManyToManyField('self',
         related_name='followed_by',
         symmetrical=False,
@@ -139,7 +144,7 @@ class Event(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, default=None, on_delete=models.CASCADE, null=True)
     place = models.ForeignKey(Place, on_delete=models.CASCADE, null=True)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=300)
     detail = models.TextField(default='')
     start_date = models.DateTimeField(null=True,blank=True)
     end_date = models.DateTimeField(null=True,blank=True)

@@ -32,10 +32,15 @@ def create_post(request, place_id):
         else:
             form = PostForm()
             
-    return render(request, 'home/post.html', {'form': form})
+    return render(request, 'home/post.html', {'form': form, 'place_id': place_id})
 
 def create_event(request, place_id):
-    place = Place.objects.get(pk=place_id) 
+    # place = Place.objects.get(pk=place_id) 
+    try:
+        place = Place.objects.get(pk=place_id)
+    except Place.DoesNotExist:
+        messages.error(request, 'Place does not exist.')
+        return redirect('home')
     
     if request.method == 'POST':
         form = EventForm(request.POST, request.FILES)
@@ -44,20 +49,26 @@ def create_event(request, place_id):
             event.place = place
             event.user = request.user
             event.save()
+            print(f"Event saved with ID: {event.id}")
         
-        if 'event_image' in request.FILES:
-            event_image = EventImage(event=event, image=request.FILES['event_image'])
-            event_image.save()
+            if 'event_image' in request.FILES:
+                event_image = EventImage(event=event, image=request.FILES['event_image'])
+                event_image.save()
+                print(f"Event image saved with ID: {event_image.id}")
             
-        place.is_event = True
-        place.save()
-        messages.success(request, 'Event added successfully.')
-        Notification.objects.create(user=request.user, message=f'New event created: {event.title}')
-        
-        return redirect('home')
+            place.is_event = True
+            place.save()
+            print(f"Place updated with is_event=True")
+            messages.success(request, 'Event added successfully.')
+            Notification.objects.create(user=request.user, message=f'New event created: {event.title}')
+            
+            return redirect('home')
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
     else:
         form = EventForm()   
-    return render(request, 'social_app/event.html', {'form': form})
+    return render(request, 'social_app/event.html', {'form': form, 'place_id': place_id})
 
 def show_event(request):
     current_time = timezone.now()
@@ -81,8 +92,11 @@ def show_event(request):
 #Events Calendar
 def event_calendar(request):
     all_events = Event.objects.all()
+    profile = request.user.profile
+    
     context = {
         "events": all_events,
+        "profile": profile,
     }
     return render(request, 'social_app/event_calendar.html', context)
 
@@ -102,14 +116,13 @@ def all_events(request):
 # def add_event(request):
 #     start_date = request.GET.get("start", None)
 #     end_date = request.GET.get("end", None)
-#     title = request.GET.get("title", None)
-   
+#     title = request.GET.get("title", None) 
 #     event = Event(name=str(title), start=start_date, end=end_date)
 #     event.save()
 #     data = {}
 #     return JsonResponse(data)
   
-  
+#create event from calendar
 def event_from_calendar(request):
     if request.method == 'POST':
         form = EventCalendarForm(request.POST, request.FILES)
@@ -117,12 +130,11 @@ def event_from_calendar(request):
             event = form.save(commit=False)
             event.user = request.user
             event.save()
+                
             if 'event_image' in request.FILES:
                 event_image = EventImage(event=event, image=request.FILES['event_image'])
                 event_image.save()
-                
-                
-                
+                  
             Notification.objects.create(user=request.user, message=f'New event added from calendar: {event.title}')
             
             return redirect('event_calendar')
@@ -234,6 +246,7 @@ def post_content(request, post_id):
     replyform = ReplyForm()
     
     profile = request.user.profile
+    referer_url = request.META.get('HTTP_REFERER', '/')
     
     context = {
         'post': post, 
@@ -241,6 +254,7 @@ def post_content(request, post_id):
         'profile': profile,
         'post_id': post_id,
         'replyform': replyform,
+        'referer_url': referer_url
     }
     
     return render(request, 'social_app/post_content.html', context)
@@ -353,7 +367,7 @@ def reply_form(request, pk):
             reply_nested = form.save(commit=False)
             reply_nested.user = request.user
             reply_nested.parent_reply = reply
-            reply_nested.level = reply.level + 1
+            # reply_nested.level = reply.level + 1
             reply_nested.save()
             
             return render(request, 'social_app/reply.html', {'reply': reply_nested})

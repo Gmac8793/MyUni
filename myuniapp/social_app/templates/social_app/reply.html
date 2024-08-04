@@ -12,7 +12,7 @@
                 {% if reply.user %}
                 <a class="block" href="">
                     <span class="text-sm font-bold text-gray-700">{{ reply.user.profile.username }}</span>
-                    <span class="text-sm text-gray-400">@{{ reply.user.username }}</span>
+                    <span class="text-sm font-semibold text-gray-800">@{{ reply.user.username }}</span>
                 </a>
                 {% else %}
                 <span class="text-gray-500">no author</span>
@@ -20,14 +20,16 @@
                 <div class="reply-content mt-2 py-4 text-base text-gray-800 md:text-normal" style="max-width: 100%; word-wrap: break-word;">{{ reply.content }}</div>
                 
                 
-                <div class="flex gap-4">
+                <div class="flex gap-4 items-center">
                     {% include 'social_app/likes_reply.html' %}
                     {% if user.is_authenticated and reply.user == user %}
-                        <a class="cursor-pointer text-gray-600 hover:text-gray-800"
+                        <a class="cursor-pointer"
                             hx-get="{% url 'reply-delete' reply.id %}"
                             hx-target="#reply-{{ reply.id }}"
                             hx-swap="outerHTML">
-                            <i class="fas fa-trash-alt"></i>
+                            <svg fill="none" viewBox="0 0 24 24" class="w-4 h-4" stroke="black">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-1 12H6L5 7m5-4h4a1 1 0 011 1v2H9V4a1 1 0 011-1z"/>
+                            </svg>
                         </a>
                     {% endif %}
                 </div>
@@ -42,7 +44,7 @@
             hx-get="{% url 'reply-form' reply.id %}"
             hx-target="this"
             hx-swap="outerHTML">
-            Reply
+            <i class="fas fa-reply mr-1"></i>ตอบกลับ
         </a>
         {% endif %}
         <div class="mt-2">

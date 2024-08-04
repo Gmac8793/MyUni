@@ -18,9 +18,12 @@
           right: 2rem;
       }
       .fc-day-grid-event {
-        color: #6C855D;
         background: #FAF5ED;
         border: 2px solid #6b7280;
+      }
+      .fc-time-grid-event {
+        background: #fef9c3;
+        border: 2px solid #6b7280
       }
       .fc-content {
         color: #6b7280;
@@ -30,57 +33,95 @@
       }
     </style>
 </head>
-<body class="bg-gray-200">
+<body class="bg-yellow-50">
 
-    <nav class="fixed top-0 z-50 px-12 py-2 w-full bg-yellow-400 border-b border-white">
-        <div class="px-3 py-3 lg:px-5 lg:pl-3">
-          <div class="flex items-center justify-between px-6">
-            <div class="flex items-center justify-start rtl:justify-end">
-              <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" id="menu-icon" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                  <span class="sr-only">Open sidebar</span>
-                  <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                     <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-                  </svg>
-               </button>
-              <a href="{% url 'home' %}" class="flex ms-2 md:me-24">
-                <span class="logo-font text-white self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">MyUni</span>
-              </a>
-            </div>
-            <div class="flex items-center">
-                <a class="text-white logo-font p-2 px-2" href="{% url 'event_from_calendar' %}">+ New Event</a>
-                <a href="{% url 'home' %}" class="text-white logo-font p-2 px-2">Home</a>
-                <div class="flex items-center ms-3">
-                  <div>
-                    <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" id="user-menu-button" data-dropdown-toggle="user-dropdown">
-                      <span class="sr-only">Open user menu</span>
-                      <img class="w-8 h-8 rounded-full" src="{{ user.profile.profileimg.url }}" alt="{{ profile.user.username }}">
-                    </button>
-                  </div>
-                  <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow" id="user-dropdown">
-                    <div class="px-4 py-3" role="none">
-                      <p class="text-sm text-gray-900" role="none">{{ user.profile.user.username }}</p>
-                      <p class="text-sm font-medium text-gray-900 truncate" role="none">{{ user.profile.user.email }}</p>
-                    </div>
-                    <ul class="py-1" role="none">
-                      <li>
-                        <a href="{% url 'profile' user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
-                      </li>
-                      <li>
-                        <a href="{% url 'logout_user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Logout</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-          </div>
+  <nav class="">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between px-6">
+        <div class="flex items-center justify-start pl-4 rtl:justify-end">
+          <a href="{% url 'home' %}" class="logo-font flex ms-2 md:me-24 text-gray-600" style="text-decoration: none;">
+            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">MyUni</span>
+          </a>
         </div>
-    </nav>
+        <div class="flex items-center">
+          <div class="w-full flex md:w-auto">
+            <ul class="flex flex-row justify-between gap-2 font-medium p-4 md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
+              <li>
+                <button class="text-gray-600 bg-white bg-opacity-50 rounded-md shadow-lg hover:text-gray-700">
+                  <a href="{% url 'home' %}" class="block md:bg-transparent p-2" aria-current="page" style="text-decoration: none;">Home</a>
+                </button>
+              </li>
+              <li>
+                <button class="text-gray-600 bg-white bg-opacity-50 rounded-md shadow-lg hover:text-gray-700">
+                  <a href="{% url 'event_from_calendar' %}" class="block md:bg-transparent p-2" aria-current="page" style="text-decoration: none;">New Event</a>
+                </button>
+              </li>
+                {% if user.is_admin %}
+                <li>
+                  <button class="text-gray-600 bg-white bg-opacity-50 rounded-md shadow-lg hover:text-gray-700">
+                      <a href="{% url 'manage_accounts' %}" class="block md:bg-transparent p-2" aria-current="page" style="text-decoration: none;">จัดการบัญชีผู้ใช้</a>
+                  </button>
+                </li>
+                <li>
+                  <button class="text-gray-600 bg-white bg-opacity-50 rounded-md shadow-lg hover:text-gray-700">
+                      <a href="{% url 'manage_posts' %}" class="block md:bg-transparent p-2" aria-current="page" style="text-decoration: none;">จัดการโพสต์</a>
+                  </button>
+                </li>
+                {% endif %}
+              <li>
+                <button type="button" class="relative flex text-sm rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" id="user-menu-button" data-dropdown-toggle="user-dropdown">
+                  <span class="sr-only">Open user menu</span>
+                  <img class="w-8 h-8 rounded-full" src="{{ profile.profileimg.url }}" alt="{{ profile.user.username }}">
+                  {% if unread_notifications_count > 0 %}
+                    <span class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs">{{ unread_notifications_count }}</span>
+                  {% endif %} 
+                </button>
+              </li>
+              
+            </ul>
+            
+          </div>
+
+          {% if user.is_authenticated %}
+          <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow" id="user-dropdown">
+              <div class="px-4 py-3" role="none">
+                <a href="{% url 'profile' user.username %}" style="text-decoration: none;"><p class="text-sm text-gray-900" role="none">{{ profile.user.username }}</p></a>
+                <p class="text-sm font-medium text-gray-900 truncate" role="none">{{ profile.user.email }}</p>
+              </div>
+              <ul class="py-1" role="none">
+                <li>
+                  <a href="{% url 'notifications' %}" class="block px-4 py-2 text-sm text-gray-700 hover:text-white hover:bg-gray-400 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" style="text-decoration: none;">
+                    Notifications
+                    {% if unread_notifications_count %}
+                    <span class="inline-flex items-center justify-center w-3 h-3 p-3 text-sm font-medium text-gray-900 bg-gray-100 rounded-full">
+                      {% if unread_notifications_count > 0  %}
+                        {{ unread_notifications_count }}
+                      {% endif %}
+                    </span>
+                    {% endif %}
+                  </a>
+                </li>
+                <li>
+                  <a href="{% url 'profile_settings' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style="text-decoration: none;" role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="{% url 'logout_user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style="text-decoration: none;" role="menuitem">Logout</a>
+                </li>
+              </ul>
+          </div>
+          {% endif %}
+        </div>
+          
+      </div>
+    </div>
+  </nav>
 
     <div class="container mx-auto p-4">
         <div class="flex flex-col">
-            <h4 class="text-xl font-semibold mb-4">Event Calendar for MyUni</h4>
-            <div class="w-full px-36 pt-16">
-                <div id="calendar" class="w-full p-12 bg-yellow-50 shadow-lg"></div>
+            
+            <div class="w-full px-36 pt-10">
+              <p class="text-xl text-center text-gray-700 font-semibold mb-6 logo-font">ปฏิทินกิจกรรมสำหรับ MyUni</p>
+                <div id="calendar" class="w-full p-12 bg-white shadow-lg rounded"></div>
             </div>
         </div>
     </div>
@@ -106,23 +147,12 @@
             });
         });
 
-
-
-
-
-        //menuicon
-        const menuIcon = document.getElementById("menu-icon");
-        const sidebar = document.getElementById("logo-sidebar");
-
-        menuIcon.addEventListener("click", function() {
-            sidebar.classList.toggle("-translate-x-full");
-        });
-
+        //navbar icon
         const profileImageButton = document.getElementById('user-menu-button');
         const userDropdownMenu = document.getElementById('user-dropdown');
 
         profileImageButton.addEventListener('click', function() {
-            userDropdownMenu.classList.toggle('hidden');
+          userDropdownMenu.classList.toggle('hidden');
         });
     </script>
 </body>

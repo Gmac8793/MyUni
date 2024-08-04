@@ -13,7 +13,7 @@ class CommentForm(forms.ModelForm):
         model = PostComment
         fields = ['content']
         widgets = {
-            'content' : forms.Textarea(attrs={'class': 'w-full px-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-gray-500 focus:outline-none', 'placeholder': 'Write your comment ...', 'rows': 5}), 
+            'content' : forms.Textarea(attrs={'class': 'w-full px-4 text-sm border border-2 border-transparent border-gray-200 focus:ring focus:ring-black focus:outline-none', 'placeholder': 'แสดงความคิดเห็น ...', 'rows': 5}), 
         }
         required=True
         labels = {
@@ -25,7 +25,7 @@ class ReplyForm(forms.ModelForm):
         model = Reply
         fields = ['content']
         widgets = {
-            'content' : forms.TextInput(attrs={'class': 'w-full  px-4 py-2  border border-2 border-transparent border-gray-200 focus:ring focus:ring-gray-500 focus:outline-none','placeholder': 'Reply ...', 'class': "!text-sm"})
+            'content' : forms.TextInput(attrs={'class': 'w-full px-4 py-2 text-xs border border-2 border-transparent border-gray-200 focus:ring focus:ring-black focus:outline-none','placeholder': 'ตอบกลับ ...'})
         }
         labels = {
             'content': '',
@@ -37,7 +37,7 @@ class NestedReplyForm(forms.ModelForm):
         model = Reply
         fields = ['content']
         widgets = {
-            'content' : forms.TextInput(attrs={'autofocuss': True, 'class': '!text-sm bg-gray-200 !p-0 !pl-0 !h-8','placeholder': 'Reply ...', 'class': "!text-sm"})
+            'content' : forms.TextInput(attrs={'autofocuss': True, 'class': '!text-xs bg-gray-200 !p-0 !pl-0 !h-8','placeholder': 'ตอบกลับ ...', 'class': "!text-xs"})
         }
         labels = {
             'content': '',
@@ -45,11 +45,10 @@ class NestedReplyForm(forms.ModelForm):
         
      
 class EventForm(forms.ModelForm):
-    image = forms.ImageField(required=False)
-    
+    #image = forms.ImageField(required=False)
     class Meta:
         model = Event
-        fields = ('title', 'detail', 'image', 'start_date', 'end_date')
+        fields = ('title', 'detail', 'start_date', 'end_date')
         
 
 class EventCalendarForm(forms.ModelForm):

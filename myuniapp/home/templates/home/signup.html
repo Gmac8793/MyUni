@@ -1,56 +1,74 @@
-{% extends 'home/base.html' %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup Page</title>
+  <style>
+    .signup-box {
+      width: 40%;
+      margin-top: 4rem;
+  }
+  </style>
+</head>
+<body class="bg-yellow-50">
+  <header class="">
+    {% include 'home/base.html' %}
+  </header>
 
-<section class="bg-yellow-200">
-  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-      <div class="w-full bg-white rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0">
-          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+  <div class="md:h-screen mt-14 flex items-center justify-center">
+    <div class="signup-box flex flex-col items-center justify-center px-6 py-8 mx-auto md:lg:py-240">
+      <div class="w-full bg-white rounded-lg shadow-xl md:mt-0 xl:p-0">
+          <div class="p-4 md:p-12 space-y-4 md:space-y-6 sm:p-8">
               <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-                  Create your account
+                  สร้างบัญชีผู้ใช้ของคุณ
               </h1>
               <form class="space-y-4 md:space-y-6" method="post" action="{% url 'signup' %}">
                 {% csrf_token %}
                 <div>
-                    <label for="username" class="block mb-2 text-sm font-medium text-gray-900">User name</label>
-                    <input type="text" id="username" name="username" required autocomplete="username" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Username">
+                  <label for="first_name" class="block text-sm font-medium text-gray-700">ชื่อ</label>
+                  <input type="text" id="first_name" name="first_name" class="mt-1 focus:ring-blue-500 focus:border-gray-600 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2.5" placeholder="ชื่อ">
                 </div>
                 <div>
-                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Your email</label>
-                    <input type="email" id="email" name="email" required autocomplete="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Email">
+                  <label for="last_name" class="block text-sm font-medium text-gray-700">นามสกุล</label>
+                  <input type="text" id="last_name" name="last_name" class="mt-1 focus:ring-blue-500 focus:border-gray-600 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2.5" placeholder="นามสกุล">
                 </div>
                 <div>
-                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                    <input type="password" id="password" name="password1" required autocomplete="new-password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Password">
-                </div>
-                <div>
-                    <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                    <input type="password" id="confirm-password" name="password2" required autocomplete="new-password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Confirm Password">
-                </div>
-                <div class="flex items-start">
-                    <div class="flex items-center h-5">
-                        <input id="terms" aria-describedby="terms" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300" required="">
-                    </div>
-                    <div class="ml-3 text-sm">
-                        <label for="terms" class="font-light text-gray-500 dark:text-gray-300">I accept the <a class="font-medium text-primary-600 hover:underline dark:text-primary-500" href="#">Terms and Conditions</a></label>
-                    </div>
-                </div>
-                <button type="submit" class="w-full text-white bg-black hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create an account</button>
+                  <label for="username" class="block text-sm font-medium text-gray-700">ชื่อผู้ใช้</label>
+                  <input type="text" id="username" name="username" required class="mt-1 focus:ring-blue-500 focus:border-gray-600 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2.5" placeholder="ชื่อผู้ใช้">
+              </div>
+              <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700">อีเมลล์</label>
+                  <input type="email" id="email" name="email" required class="mt-1 focus:ring-blue-500 focus:border-gray-600 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2.5" placeholder="อีเมลล์">
+              </div>
+              <div>
+                  <label for="password1" class="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
+                  <input type="password" id="password1" name="password1" required class="mt-1 focus:ring-gray-500 focus:border-gray-600 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2.5" placeholder="รหัสผ่าน">
+              </div>
+              <div>
+                  <label for="password2" class="block text-sm font-medium text-gray-700">ยืนยันรหัสผ่าน</label>
+                  <input type="password" id="password2" name="password2" required class="mt-1 focus:ring-gray-500 focus:border-gray-600 block w-full shadow-sm sm:text-sm border-gray-300 rounded p-2.5" placeholder="ยืนยันรหัสผ่าน">
+              </div>
+                <button type="submit" class="w-full text-white bg-black hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">สร้างบัญชี</button>
                 <p class="text-sm font-light text-gray-500">
-                    Already have an account? <a href="{% url 'login_user' %}" class="font-medium text-primary-600 hover:underline">Login here</a>
+                    คุณมีบัญชีแล้ว? <a href="{% url 'login_user' %}" class="font-medium text-primary-600 hover:underline">เข้าสู่ระบบที่นี่</a>
                 </p>
             </form>
           </div>
       </div>
+    </div>
   </div>
-</section>
-<script>
-  const menuIcon = document.getElementById('menu-icon');
-  const userMenu = document.getElementById('navbar-user');
-  
-  menuIcon.addEventListener('click', function() {
-  userMenu.classList.toggle('hidden');
-  });
+
+
+
+  <script>
+    const menuIcon = document.getElementById('menu-icon');
+    const userMenu = document.getElementById('navbar-user');
+    
+    menuIcon.addEventListener('click', function() {
+    userMenu.classList.toggle('hidden');
+    });
   </script>
-
-{% endblock %}
-
+  
+</body>
+</html>

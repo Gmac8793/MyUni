@@ -1,11 +1,8 @@
 {% extends 'home/base.html' %}
 {% block content %}
   <!--แสดงแผนที่-->
-  <div class="flex h-screen justify-center items-center bg-yellow-50">
-    <div class="p-10" style="height: 50vh; width: 30vw;">
-      <p class="logo-font font-bold text-3xl text-gray-600">Welcome to MyUniversity!</p>
-      <p class="text-lg text-gray-500 logo-font mt-6">Your adventure begins here! 🌟 Find something interesting, fun, and friendly. Ready to explore?</p>
-    </div>
-    <div id="map" class="rounded"></div>
+  <div class="relative h-screen">
+    <div id="map" class=""></div>
   </div>
+  
 {% endblock %}

@@ -34,8 +34,8 @@
               </a>
             </div>
             <div class="flex items-center justify-between gap-4">
-                <a class="text-white py-2 logo-font" href="{% url 'event_calendar' %}"> Calendar </a>
-                <a class="text-white py-2 logo-font" href="{% url 'event_edit' event.id%}"> Edit Event </a>
+                <a class="text-white py-2 logo-font" href="{% url 'event_calendar' %}"> ปฏิทินกิจกรรม </a>
+                <a class="text-white py-2 logo-font" href="{% url 'event_edit' event.id%}">แก้ไข</a>
                 <div class="flex items-center ms-3">
                   <div>
                     <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" id="user-menu-button" data-dropdown-toggle="user-dropdown">
@@ -50,10 +50,10 @@
                     </div>
                     <ul class="py-1" role="none">
                       <li>
-                        <a href="{% url 'profile' user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100" role="menuitem">Settings</a>
+                        <a href="{% url 'profile' user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:text-white hover:bg-yellow-400" role="menuitem">Settings</a>
                       </li>
                       <li>
-                        <a href="{% url 'logout_user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100" role="menuitem">Logout</a>
+                        <a href="{% url 'logout_user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Logout</a>
                       </li>
                     </ul>
                   </div>
@@ -68,10 +68,10 @@
 
         <div class="clearfix mt-16">
             <div class="flex">
-                <p class="text-3xl text-gray-800">{{ event.title }}</p>
+                <p class="text-2xl text-gray-800">{{ event.title }}</p>
                 {% if user.is_authenticated and event.user == user %}
-                  <a class="text-gray-500 py-2 px-2" href="{% url 'event_edit' event.id%}"><i class="fas fa-edit text-sm"> Edit</i></a>
-                  <a class="text-gray-500 py-2 px-2" href="{% url 'event-delete' event.id %}"><i class="fas fa-trash-alt text-sm"> Remove</i></a>
+                  <a class="text-gray-500 py-2 px-2" href="{% url 'event_edit' event.id%}"><i class="fas fa-edit text-sm"> แก้ไข</i></a>
+                  <a class="text-gray-500 py-2 px-2" href="{% url 'event-delete' event.id %}"><i class="fas fa-trash-alt text-sm"> นำออก</i></a>
                 {% endif %}
             </div>
             <p class="pb-4 text-sm">From <span class="text-gray-500">{{ event.start_date }}</span> To <span class="text-gray-500">{{ event.end_date }}</span></p>
@@ -87,18 +87,18 @@
         </div>
         <hr class="my-4">
         <div class="flex justify-between items-center">
-            <h4 class="text-lg text-gray-700 font-semibold">Members</h4>
+            <h4 class="text-lg text-gray-700 font-semibold">สมาชิกในกิจกรรมนี้</h4>
             {% if user.is_authenticated and event.user == user %}
-            <a class="py-2 px-4" href="{% url 'add_event_member' event.id %}"><i class="fas fa-user-plus text-gray-500 text-sm"> Add Member</i></a>
+            <a class="py-2 px-4" href="{% url 'add_event_member' event.id %}"><i class="fas fa-user-plus text-gray-500 text-sm"> เพิ่มสมาชิก</i></a>
             {% endif %}
         </div>
-        <table class="min-w-full divide-y divide-gray-200 border border-gray-300 mt-4">
+        <table class="min-w-full divide-y divide-gray-200 border border-gray-300 my-4">
             <thead class="bg-gray-50">
                 <tr>
                     <th class="w-10 px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ชื่อ</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">อีเมลล์</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">การดำเนินการ</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
