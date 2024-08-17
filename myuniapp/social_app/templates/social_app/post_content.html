@@ -33,7 +33,7 @@
       <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         <a href="{% url 'home' %}" class="flex pr-4 ms-2 text-white logo-font md:me-24">Home</a>
         <div class="text-white logo-font pr-4">
-          <a href="{{ referer_url }}">ย้อนกลับ</a>
+          <a href="{% url 'feed' %}?id={{ post.place.id }}">ย้อนกลับ</a>
         </div>
           <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-1 focus:ring-gray-200 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
             <span class="sr-only">Open user menu</span>

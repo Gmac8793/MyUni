@@ -28,42 +28,38 @@
                     <h1 class="text-xl text-white font-bold leading-tight tracking-tight text-gray-600 md:text-2xl text-center">
                         แก้ไขกิจกรรมนี้
                     </h1>
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" class="space-y-4">
                         {% csrf_token %}
                         <div>
-                            <label for="title" class="block text-sm font-medium text-gray-600">หัวข้อ:</label>
-                            <input type="text" id="title" name="title" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded">
+                            <label for="title" class="block text-sm font-medium text-gray-700">หัวข้อ:</label>
+                            <input type="text" id="title" name="title" value="{{ event.title }}" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                         </div>
                         <div>
-                            <label for="detail" class="block text-sm font-medium text-gray-600">รายละเอียด:</label>
-                            <textarea id="detail" name="detail" required rows="3" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded"></textarea>
+                            <label for="detail" class="block text-sm font-medium text-gray-700">รายละเอียด:</label>
+                            <textarea id="detail" name="detail" required rows="3" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ event.detail }}</textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-x-4">
                             <div>
-                                <label for="start_date" class="block text-sm font-medium text-gray-600">เริ่มต้น:</label>
-                                <input type="datetime-local" id="start_date" name="start_date" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded">
+                                <label for="start_date" class="block text-sm font-medium text-gray-700">เริ่ม:</label>
+                                <input type="datetime-local" id="start_date" name="start_date" value="{{ event.start_date|date:'Y-m-d\\TH:i' }}" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
                             <div>
-                                <label for="end_date" class="block text-sm font-medium text-gray-600">สิ้นสุด:</label>
-                                <input type="datetime-local" id="end_date" name="end_date" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded">
+                                <label for="end_date" class="block text-sm font-medium text-gray-700">สิ้นสุด:</label>
+                                <input type="datetime-local" id="end_date" name="end_date" required value="{{ event.end_date|date:'Y-m-d\\TH:i' }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
                         </div>
                         <div>
-                            <label for="place" class="block text-sm font-medium text-gray-600">สถานที่:</label>
-                            <select id="place" name="place" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                {% for place in form.place.field.queryset %}
-                                    <option value="{{ place.id }}">{{ place.name }}</option>
-                                {% endfor %}
-                            </select>
+                            <label for="event_image" class="block text-sm font-medium text-gray-700">เพิ่มรูปภาพ:</label>
+                            <input type="file" id="event_image" name="event_image" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            {% if event.image %}
+                                <p class="mt-2 text-sm text-gray-600">Current Image: <img src="{{ event.image.url }}" alt="Event Image" class="h-32"></p>
+                            {% endif %}
                         </div>
                         <div>
-                            <label for="event_image" class="block text-sm font-medium text-gray-600">เพิ่มรูปภาพ:</label>
-                            <input type="file" id="event_image" name="event_image" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded">
-                        </div>
-                        <div class="pt-4">
-                            <button type="submit" class="w-full py-2 px-4 border border-transparent rounded shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2">บันทึกการเปลี่ยนแปลง</button>
+                            <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2">บันทึกการเปลี่ยนแปลง</button>
                         </div>
                     </form>
+                    
                     <div class="text-center justity-items-center pt-2">
                         <a href="{{ referer_url }}" class="text-gray-600">ย้อนกลับ</a>
                     </div>

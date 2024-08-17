@@ -39,7 +39,7 @@ class PlaceForm(forms.ModelForm):
     image = forms.ImageField(required=False)
     class Meta:
         model = Place
-        fields = ('name', 'detail', 'latitude', 'longitude')
+        fields = ('name', 'detail', 'latitude', 'longitude', 'image')
         
 class ProfileSettingsForm(forms.ModelForm):
     

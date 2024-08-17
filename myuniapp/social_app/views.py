@@ -204,7 +204,7 @@ def event_delete(request, event_id):
 def event_edit(request, pk):
     event = get_object_or_404(Event, id=pk)
     if request.method == 'POST':
-        form = EventCalendarForm(request.POST, request.FILES, instance=event)
+        form = EventForm(request.POST, request.FILES, instance=event)
         if form.is_valid():
             event = form.save(commit=False)
             event.save()

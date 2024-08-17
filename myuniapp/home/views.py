@@ -287,6 +287,8 @@ def add_new_place(request):
                 place_image = PlaceImage(place=place, image=request.FILES['image'])
                 place_image.save()
             return redirect('home')
+        else:
+            print(form.errors)
     else:
         place_url = {'latitude': lat, 'longitude': lng}
         form = PlaceForm(initial=place_url)
